@@ -38,7 +38,6 @@ app.get('/', (req, res) => {
     res.send('Hello World!')
 })
 
-// We use the /dynamic route so that if you'
 app.get('/dynamic', (req, res) => {
   base(config.airtable_table_name).select({
     // Selecting the first 3 records in Grid view:
@@ -50,13 +49,12 @@ app.get('/dynamic', (req, res) => {
       if(record.fields.Status.toLowerCase() == 'live'){
         fetched_records.push({
           title: record.fields.Title,
-          message: record.fields.Message,
-          
+          message: record.fields.Message
         })
       }
     })
 
-    res.render('pages/annoucements', {
+    res.render('pages/announcements', {
       data_rows: fetched_records
     })
   }, function done(err) {
