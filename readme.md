@@ -4,4 +4,4 @@ This example plugin is best used when following along with the [Build a Plugin w
 See tutorial above for instructions on how to run.
 
 ## Notes
-You will need to rename the `config-example.js` to just `confij.js`.
+You will need to rename the `config-example.js` to just `config.js`.
