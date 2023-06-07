@@ -14,54 +14,59 @@
  * limitations under the License.
  */
 
-var Airtable = require('airtable')
+const express = require('express');
+const path = require('path');
+const Airtable = require('airtable');
+const config = require('./config.js');
 
-const express = require('express')
-const path = require('path')
-
-const config = require('./config.js')
-
-var base = new Airtable({
+const airtable = new Airtable({
   endpointUrl: 'https://api.airtable.com',
-  apiKey: config.airtable_api_key
-}).base(config.airtable_base)
+  apiKey: config.airtable_personal_access_token
+});
 
-const app = express()
-const port = process.env.PORT || '8080'
+const base = airtable.base(config.airtable_base);
+const app = express();
+const port = process.env.PORT || '8080';
 
-// set the view engine to ejs
-app.set('view engine', 'ejs')
+// Set the view engine to ejs
+app.set('view engine', 'ejs');
 
-app.use(express.static(path.join(__dirname, 'public')))
+// Set up static files directory
+app.use(express.static(path.join(__dirname, 'public')));
 
+// Root route
 app.get('/', (req, res) => {
-    res.send('Hello World!')
-})
+  res.send('Hello World!');
+});
 
+// Dynamic route
 app.get('/dynamic', (req, res) => {
-  base(config.airtable_table_name).select({
-    // Selecting the first 3 records in Grid view:
-    maxRecords: 3,
-    view: "Grid view"
-  }).firstPage().then(records => {
-    var fetched_records = []
-    records.forEach((record) => {
-      if(record.fields.Status.toLowerCase() == 'live'){
-        fetched_records.push({
-          title: record.fields.Title,
-          message: record.fields.Message
-        })
-      }
+  // Fetch the first 3 records from Airtable
+  base(config.airtable_table_name)
+    .select({
+      maxRecords: 3,
+      view: 'Grid view',
     })
+    .firstPage()
+    .then((records) => {
+      const liveRecords = records.filter(
+        (record) => record.fields.Status.toLowerCase() === 'live'
+      );
 
-    res.render('pages/announcements', {
-      data_rows: fetched_records
+      const responseData = liveRecords.map((record) => ({
+        title: record.fields.Title,
+        message: record.fields.Message,
+      }));
+
+      res.render('pages/announcements', {
+        data_rows: responseData,
+      });
     })
-  }, function done(err) {
-      if (err) { console.error(err); return; }
-  })
-})
+    .catch((err) => {
+      console.error(err);
+    });
+});
 
 app.listen(port, () => {
-  console.log(`Listening to requests on http://localhost:${port}`)
-})
+  console.log(`Listening to requests on http://localhost:${port}`);
+});
