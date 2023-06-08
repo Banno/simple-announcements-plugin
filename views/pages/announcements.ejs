@@ -4,23 +4,20 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Plugin Framework QA</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdn.tailwindcss.com"></script>
     </head>
     <body>
         <div class="list-group"> 
             <% data_rows.forEach(function(row) { %>
-                <div class="list-group-item list-group-item-action d-flex gap-3 py-3">
-                    <div class="d-flex gap-2 w-100 justify-content-between">
+                <div class="list-group-item list-group-item-action flex gap-3 py-3 mx-2 border-b border-gray-200">
+                    <div class="flex gap-2 w-full justify-between">
                         <div>
-                            <h6 class="mb-0"><%= row.title %></h6>
-                            <p class="mb-0" style="opacity: .75!important;"><%= row.message %></p>
+                            <h6 class="mb-0 text-lg font-semibold"><%= row.title %></h6>
+                            <p class="mb-0 text-gray-500"><%= row.message %></p>
                         </div>
-                        <small class="text-nowrap" style="opacity: .5!important;">now</small>
                     </div>
                 </div>
             <% }) %>
         </div>
-
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-kQtW33rZJAHjgefvhyyzcGF3C5TFyBQBA13V1RKPf4uH+bwyzQxZ6CmMZHmNBEfJ" crossorigin="anonymous"></script>
     </body>
 </html>
